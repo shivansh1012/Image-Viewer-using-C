@@ -1,5 +1,6 @@
 #include<stdio.h>
 int main()
 {
-  printf("Welcome to our project, an open source. Do contribute");
+  printf("Welcome to our project, an open source. Do contribute.\n");
+  printf("Project Contributed by Gaurav, Sayantan and Shivansh.\n");
 }

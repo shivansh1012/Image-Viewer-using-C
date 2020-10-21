@@ -1,0 +1,109 @@
+#include<stdio.h>
+#include<graphics.h>
+#include<stdlib.h>
+#include<stddef.h>
+#include<string.h>
+struct LL{
+char name[100];
+struct LL *next;
+struct LL *prev;
+};
+typedef struct LL node;
+void push(node **head,char data[]);
+void delete_file(node **head);
+node *search_file(node *head);
+void show(node *head);
+int main()
+{
+    node *head;
+    head = NULL; int n,i,ch; char f_name[100];
+    // Enable automatic pushing of image files to the list
+    printf("Enter the number of image files\n");
+    scanf("%d",&n);
+    for(i=0;i<n;i++)
+    {
+        printf("Enter file names\n");
+        scanf("%s",f_name);
+        push(&head,f_name);
+    }
+    for(i=0;i<100;i++)
+    {
+        printf("Enter 1 to delete, 2 to search and 3 to view 4 to exit\n");
+        scanf("%d",&ch);
+        if(ch==1)
+            delete_file(&head);
+        else if(ch==2)
+            {
+                node *t;
+                t = search_file(head);
+                if (t==NULL)
+                    printf("Does not exist\n");
+                else
+                    printf("Exists\n");
+            }
+        else if(ch==3)
+            show(head);
+        else if (ch==4)
+            break;
+        else
+            printf("Invalid Choice\n");
+
+    }
+}
+void push(node **head, char data[])
+{
+    node *new_node;
+    new_node = (node *)malloc(sizeof(node));
+    strcpy(new_node->name,data);
+    new_node->prev=NULL;
+    new_node->next = (*head);
+    if ((*head)!=NULL)
+        new_node->next->prev = new_node;
+    (*head)=new_node;
+}
+node *search_file(node *head)
+{
+    node *t;
+    t=(head);
+    char key[100]; printf("Enter the desired file name\n");
+    scanf("%s",key);
+    while((t!=NULL)&&(strcmp(t->name,key)!=0))
+        t=t->next;
+    return t;
+}
+void delete_file(node **head)
+{
+    node *t;
+    t= search_file(*(head));
+    if(t==NULL)
+        {
+        printf("File does not exist\n");
+        return;
+        }
+    if ((*head)==t)
+    {
+        (*head)=t->next;
+    }
+    if(t->next!=NULL)
+        t->next->prev=t->prev;
+    if (t->prev!=NULL)
+        t->prev->next=t->next;
+    free(t);
+
+}
+void show(node *head)
+{
+    node *t;
+    t=head;
+    if (t==NULL)
+    {
+        printf("No files to view\n");
+        return;
+    }
+    while(t!=NULL)
+    {
+        printf("[%s]--->",t->name);
+        t=t->next;
+    }
+    printf("\n");
+}

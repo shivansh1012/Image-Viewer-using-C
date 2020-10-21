@@ -3,53 +3,63 @@
 #include<stdlib.h>
 #include<stddef.h>
 #include<string.h>
-struct LL{
-char name[100];
-struct LL *next;
-struct LL *prev;
+
+struct LL
+{
+    char name[100];
+    struct LL *next;
+    struct LL *prev;
 };
+
 typedef struct LL node;
 void push(node **head,char data[]);
 void delete_file(node **head);
 node *search_file(node *head);
 void show(node *head);
+void displayImg(node *head);
+
 int main()
 {
     node *head;
-    head = NULL; int n,i,ch; char f_name[100];
+    head = NULL;
+    int n, i, ch;
+    char f_name[100];
+
     // Enable automatic pushing of image files to the list
-    printf("Enter the number of image files\n");
+    printf("Enter the number of image files:\n");
     scanf("%d",&n);
+
     for(i=0;i<n;i++)
     {
-        printf("Enter file names\n");
+        printf("\nEnter file name:\n");
         scanf("%s",f_name);
         push(&head,f_name);
     }
+
     for(i=0;i<100;i++)
     {
-        printf("Enter 1 to delete, 2 to search and 3 to view 4 to exit\n");
+        printf("\nEnter\n1 to delete \n2 to search \n3 for slideshow \n4 to exit:\n");
         scanf("%d",&ch);
         if(ch==1)
             delete_file(&head);
         else if(ch==2)
-            {
-                node *t;
-                t = search_file(head);
-                if (t==NULL)
-                    printf("Does not exist\n");
-                else
-                    printf("Exists\n");
-            }
+        {
+            node *t;
+            t = search_file(head);
+            if (t==NULL)
+                printf("Does not exist\n");
+            else
+                printf("Exists\n");
+        }
         else if(ch==3)
             show(head);
         else if (ch==4)
             break;
         else
             printf("Invalid Choice\n");
-
     }
 }
+
 void push(node **head, char data[])
 {
     node *new_node;
@@ -61,16 +71,18 @@ void push(node **head, char data[])
         new_node->next->prev = new_node;
     (*head)=new_node;
 }
+
 node *search_file(node *head)
 {
     node *t;
     t=(head);
-    char key[100]; printf("Enter the desired file name\n");
+    char key[100]; printf("\nEnter the desired file name:\n");
     scanf("%s",key);
     while((t!=NULL)&&(strcmp(t->name,key)!=0))
         t=t->next;
     return t;
 }
+
 void delete_file(node **head)
 {
     node *t;
@@ -91,6 +103,7 @@ void delete_file(node **head)
     free(t);
 
 }
+
 void show(node *head)
 {
     node *t;
@@ -103,7 +116,21 @@ void show(node *head)
     while(t!=NULL)
     {
         printf("[%s]--->",t->name);
-        t=t->next;
+        displayImg(t);
+        t = t->next;
     }
     printf("\n");
+}
+
+void displayImg(node *head)
+{
+    //Displays the image in a window
+    initwindow(720, 640, head -> name);
+
+    readimagefile((head -> name), 0, 0, 720, 640);
+
+    Sleep(4000);
+    closegraph();
+
+    getchar();
 }

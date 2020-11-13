@@ -17,6 +17,7 @@ void delete_file(node **head);
 node *search_file(node *head);
 void show(node *head);
 void displayImg(node *head);
+void image_opn(node **head);
 
 int main()
 {
@@ -31,14 +32,14 @@ int main()
 
     for(i=0;i<n;i++)
     {
-        printf("\nEnter file name:\n");
+        printf("Enter file name:\n");
         scanf("%s",f_name);
         push(&head,f_name);
     }
 
     for(i=0;i<100;i++)
     {
-        printf("\nEnter\n1 to delete \n2 to search \n3 for slideshow \n4 to exit:\n");
+        printf("Enter\n1 to delete \n2 to search \n3 for slide show \n4 to enable gallery mode:\n5 to exit\n");
         scanf("%d",&ch);
         if(ch==1)
             delete_file(&head);
@@ -54,6 +55,8 @@ int main()
         else if(ch==3)
             show(head);
         else if (ch==4)
+            image_opn(&head);
+        else if (ch==5)
             break;
         else
             printf("Invalid Choice\n");
@@ -132,5 +135,43 @@ void displayImg(node *head)
     Sleep(4000);
     closegraph();
 
-    getchar();
+    return;
 }
+void image_opn(node **head)
+{
+    node *t;
+    t=(*head); int i;char ch;
+    displayImg(t);
+    for(i=0;i<100;i++)
+    {
+        printf("Enter N for next, P for Previous and X to exit\n");
+        scanf("\n%c",&ch);
+
+        if(ch=='N')
+        {
+            if (t->next==NULL)
+                printf("No next photo available, end of files\n");
+            else
+                {
+                    t=t->next;
+                    displayImg(t);
+
+        }
+        }
+        else if(ch=='P')
+        {
+            if (t->prev==NULL)
+                printf("No previous file available\n");
+            else
+                {
+                    t=t->prev;
+                    displayImg(t);
+                }
+        }
+        else if (ch=='X')
+            break;
+        else
+            printf("Invalid input\n");
+    }
+}
+

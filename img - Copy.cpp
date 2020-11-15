@@ -14,6 +14,8 @@ struct LL
     struct LL *prev;
 };
 
+char path[1000];
+
 typedef struct LL node;
 void push(node **head,char data[]);
 void delete_file(node **head);
@@ -28,9 +30,20 @@ int main()
     node *head;
     head = NULL;
     int n, i, ch;
+    /*char f_name[100];
+
+    // Enable automatic pushing of image files to the list
+    printf("Enter the number of image files:\n");
+    scanf("%d",&n);
+
+    for(i=0;i<n;i++)
+    {
+        printf("Enter file name:\n");
+        scanf("%s",f_name);
+        push(&head,f_name);
+    }*/
 
     DIR *d;
-    char path[1000];
     char filename[1000];
     struct dirent *dir;
     printf("Enter the path to the Image directory: \n");
@@ -151,8 +164,14 @@ void displayImg(node *head)
 {
     //Displays the image in a window
     initwindow(720, 640, head -> name);
+    char filename[10000];
+    char mid[]={'\\'};
+    printf("%s",mid);
+    strcat(filename,path);
+    strcat(filename,mid);
+    strcat(filename,head->name);
 
-    readimagefile((head -> name), 0, 0, 720, 640);
+    readimagefile(filename, 0, 0, 720, 640);
 
     Sleep(4000);
     closegraph();

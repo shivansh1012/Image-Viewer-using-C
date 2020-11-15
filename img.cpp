@@ -3,10 +3,7 @@
 #include<stdlib.h>
 #include<stddef.h>
 #include<string.h>
-
 #include<dirent.h>
-
-
 struct LL
 {
     char name[100];
@@ -20,20 +17,20 @@ void delete_file(node **head);
 node *search_file(node *head);
 void show(node *head);
 void displayImg(node *head);
-void image_opn(node **head);
 int is_jpeg(char *fn);
+void fetch_file(char *path);
+void image_opn(node **head);
 
 int main()
 {
+    DIR *d;
+    int n, i;
+    char ch, path[1000];
+    char filename[1000];
     node *head;
     head = NULL;
-    int n, i, ch;
-
-    DIR *d;
-    char path[1000];
-    char filename[1000];
     struct dirent *dir;
-    printf("Enter the path to the Image directory: \n");
+    printf("Enter the path to the photo directory: \n");
     scanf("%[^\n]%*c",path);
 	printf("\n");
 
@@ -50,18 +47,22 @@ int main()
         while ((dir = readdir(d)) != NULL)
         {
             strcpy(filename,dir->d_name);
-            printf("%s\n",filename);
-            if(is_jpeg(filename)) {
+            printf("%s",filename);
+            if(is_jpeg(filename))
+            {
+                printf("\n");
+                printf("%s\n", dir->d_name);
                 push(&head,filename);
             }
-            else continue;
         }
         closedir(d);
     }
 
+
+
     for(i=0;i<100;i++)
     {
-        printf("Enter\n1 to delete \n2 to search \n3 for slide show \n4 to enable gallery mode:\n5 to exit\n");
+        printf("\nEnter\n1 to delete \n2 to search \n3 for slide show \n4 to enable gallery mode\n5 to exit\n");
         scanf("%d",&ch);
         if(ch==1)
             delete_file(&head);
@@ -159,6 +160,19 @@ void displayImg(node *head)
 
     return;
 }
+
+int is_jpeg(char *fn)
+{
+	char check[5];
+	int len = strlen(fn), i, j;
+	if(len >= 4)
+		for(i=len-4,j=0;i<len;i++)
+			check[j++] = fn[i];
+	if( strcmp(".jpg",check) )
+		return 0;
+	return 1;
+}
+
 void image_opn(node **head)
 {
     node *t;
@@ -195,17 +209,4 @@ void image_opn(node **head)
         else
             printf("Invalid input\n");
     }
-}
-
-
-int is_jpeg(char *fn)
-{
-	char check[5];
-	int len = strlen(fn), i, j;
-	if(len >= 4)
-		for(i=len-4,j=0;i<len;i++)
-			check[j++] = fn[i];
-	if( strcmp(".jpg",check) )
-		return 0;
-	return 1;
 }
